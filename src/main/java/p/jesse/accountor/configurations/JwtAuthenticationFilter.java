@@ -18,7 +18,7 @@ import p.jesse.accountor.service.JwtService;
 import p.jesse.accountor.service.UserService;
 
 import java.io.IOException;
-
+/*
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -28,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Override
+    /*@Override
     protected void doFilterInternal(@Nonnull HttpServletRequest request, @Nonnull HttpServletResponse response, @Nonnull FilterChain filterChain) throws ServletException, IOException {
         final String authHeader = request.getHeader("Authorization");
         final String jwtToken;
@@ -55,5 +55,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         filterChain.doFilter(request, response);
-    }
-}
+    }*/
