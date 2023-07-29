@@ -23,7 +23,7 @@ public class CreateUser {
     public void createTestUsers() {
         userRepository.deleteAll();
 
-        User testUser1 = new User("Jesse", "Plym", "Plymander", passwordHash.encryptPassword("jplym96"), LocalDate.now(), ROLE_USER);
+        User testUser1 = new User("Jesse", "Plym", "Plymander", passwordHash.encryptPassword("jplym1996"), LocalDate.now(), ROLE_USER);
         User testUser2 = new User("Admin", "Admin", "admin", passwordHash.encryptPassword("verysecret"), LocalDate.now(), ROLE_ADMIN);
 
         userRepository.saveAll(List.of(testUser1, testUser2));

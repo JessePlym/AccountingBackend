@@ -1,5 +1,6 @@
 package p.jesse.accountor.service;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Service;
 import p.jesse.accountor.entities.User;
 import p.jesse.accountor.enums.Role;
 import p.jesse.accountor.records.AuthenticationRequest;
-import p.jesse.accountor.records.AuthenticationResponse;
 import p.jesse.accountor.records.RegisterRequest;
 import p.jesse.accountor.repositories.UserRepository;
 import p.jesse.accountor.utils.PasswordHash;
@@ -30,9 +30,20 @@ public class AuthService {
         this.jwtService = jwtService;
     }
 
-    public AuthenticationResponse register(RegisterRequest request) {
-        // TODO: handle validation
-        User user = new User(
+    public ResponseEntity<String> register(RegisterRequest request) {
+        if (request.password().length() < 8) {
+            throw new IllegalStateException("Password too short!");
+        }
+        if (request.username().length() == 0) {
+            throw new IllegalStateException("Username must not be empty!");
+        }
+        if (userRepository.findByUsername(request.username()).isPresent()) {
+            throw new DataIntegrityViolationException("Username already exists!");
+        }
+        if (!request.password().equals(request.passwordCheck())) {
+            throw new IllegalStateException("Passwords do not match!");
+        }
+        User newUser = new User(
                 request.firstName(),
                 request.lastName(),
                 request.username(),
@@ -40,9 +51,8 @@ public class AuthService {
                 LocalDate.now(),
                 Role.ROLE_USER
         );
-        userRepository.save(user);
-        //String jwtToken = jwtService.generateToken(user);
-        return null;
+        userRepository.save(newUser);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     public ResponseEntity<String> authenticate(AuthenticationRequest request) throws CredentialException {
