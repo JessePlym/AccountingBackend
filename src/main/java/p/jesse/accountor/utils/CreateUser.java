@@ -14,11 +14,14 @@ import static p.jesse.accountor.enums.Role.USER;
 @Component
 public class CreateUser {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private PasswordHash passwordHash;
+    private final PasswordHash passwordHash;
+
+    public CreateUser(UserRepository userRepository, PasswordHash passwordHash) {
+        this.userRepository = userRepository;
+        this.passwordHash = passwordHash;
+    }
 
     public void createTestUsers() {
         userRepository.deleteAll();
