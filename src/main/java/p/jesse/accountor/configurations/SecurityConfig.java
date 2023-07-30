@@ -9,6 +9,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -23,6 +24,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalAuthentication
 public class SecurityConfig {
 
     private final RsaKeyProperties rsaKeyProperties;
@@ -38,8 +40,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/").permitAll();
-                    auth.requestMatchers(HttpMethod.POST, "/auth/authenticate").permitAll();
-                    auth.requestMatchers(HttpMethod.POST, "/auth/register").permitAll();
+                    auth.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
+                    auth.requestMatchers("/api/v1/users").hasAuthority("SCOPE_ADMIN");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {

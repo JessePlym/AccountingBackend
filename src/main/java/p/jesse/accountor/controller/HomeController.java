@@ -11,6 +11,6 @@ public class HomeController {
 
     @GetMapping("/index")
     public String home(Authentication authentication) {
-        return "Home " + authentication.getName();
+        return "Home " + authentication.getName() + "\nRole " + authentication.getAuthorities();
     }
 }

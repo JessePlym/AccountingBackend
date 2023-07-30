@@ -31,12 +31,6 @@ public class AuthService {
     }
 
     public ResponseEntity<String> register(RegisterRequest request) {
-        if (request.password().length() < 8) {
-            throw new IllegalStateException("Password too short!");
-        }
-        if (request.username().length() == 0) {
-            throw new IllegalStateException("Username must not be empty!");
-        }
         if (userRepository.findByUsername(request.username()).isPresent()) {
             throw new DataIntegrityViolationException("Username already exists!");
         }
@@ -49,7 +43,7 @@ public class AuthService {
                 request.username(),
                 passwordHash.encryptPassword(request.password()),
                 LocalDate.now(),
-                Role.ROLE_USER
+                Role.USER
         );
         userRepository.save(newUser);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -57,7 +51,7 @@ public class AuthService {
 
     public ResponseEntity<String> authenticate(AuthenticationRequest request) throws CredentialException {
         if (userRepository.findByUsername(request.username()).isEmpty()) {
-            throw new CredentialException("Username must not be empty!");
+            throw new CredentialException("Username does not exist!");
         }
         User user = userRepository.findByUsername(request.username()).get();
         if (!passwordHash.checkPassword(user.getPassword(), request.password())) {

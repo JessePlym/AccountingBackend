@@ -8,8 +8,8 @@ import p.jesse.accountor.repositories.UserRepository;
 import java.time.LocalDate;
 import java.util.List;
 
-import static p.jesse.accountor.enums.Role.ROLE_ADMIN;
-import static p.jesse.accountor.enums.Role.ROLE_USER;
+import static p.jesse.accountor.enums.Role.ADMIN;
+import static p.jesse.accountor.enums.Role.USER;
 
 @Component
 public class CreateUser {
@@ -23,8 +23,8 @@ public class CreateUser {
     public void createTestUsers() {
         userRepository.deleteAll();
 
-        User testUser1 = new User("Jesse", "Plym", "Plymander", passwordHash.encryptPassword("jplym1996"), LocalDate.now(), ROLE_USER);
-        User testUser2 = new User("Admin", "Admin", "admin", passwordHash.encryptPassword("verysecret"), LocalDate.now(), ROLE_ADMIN);
+        User testUser1 = new User("Jesse", "Plym", "Plymander", passwordHash.encryptPassword("jplym1996"), LocalDate.now(), USER);
+        User testUser2 = new User("Admin", "Admin", "admin", passwordHash.encryptPassword("verysecret"), LocalDate.now(), ADMIN);
 
         userRepository.saveAll(List.of(testUser1, testUser2));
     }
