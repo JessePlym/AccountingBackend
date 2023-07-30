@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
-                    auth.requestMatchers("/api/v1/users").hasAuthority("SCOPE_ADMIN");
+                    auth.requestMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority("SCOPE_ADMIN");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {
