@@ -40,8 +40,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/").permitAll();
-                    auth.requestMatchers(HttpMethod.POST, "/auth/**").permitAll();
-                    auth.requestMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority("SCOPE_ADMIN");
+                    auth.requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
+                    auth.requestMatchers(HttpMethod.GET, "/api/users").hasAuthority("SCOPE_ADMIN");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {

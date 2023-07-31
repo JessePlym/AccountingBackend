@@ -12,7 +12,7 @@ import p.jesse.accountor.service.JwtService;
 import javax.security.auth.login.CredentialException;
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/auth")
 @CrossOrigin
 public class AuthenticationController {
 

@@ -52,14 +52,15 @@ public class AuthService {
     public ResponseEntity<String> authenticate(AuthenticationRequest request) throws CredentialException {
         if (userRepository.findByUsername(request.username()).isEmpty()) {
             throw new CredentialException("Username does not exist!");
+        } else {
+            User user = userRepository.findByUsername(request.username()).get();
+            if (!passwordHash.checkPassword(user.getPassword(), request.password())) {
+                throw new CredentialException("Username or password incorrect!");
+            }
+            String token = jwtService.generateToken(user);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add(HttpHeaders.AUTHORIZATION, token);
+            return new ResponseEntity<>(headers, HttpStatus.OK);
         }
-        User user = userRepository.findByUsername(request.username()).get();
-        if (!passwordHash.checkPassword(user.getPassword(), request.password())) {
-            throw new CredentialException("Username or password incorrect!");
-        }
-        String token = jwtService.generateToken(user);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, token);
-        return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 }
