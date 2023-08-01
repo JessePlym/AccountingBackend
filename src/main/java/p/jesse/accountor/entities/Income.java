@@ -1,6 +1,7 @@
 package p.jesse.accountor.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import java.math.BigDecimal;
@@ -12,6 +13,7 @@ public class Income extends Payment {
     private String source;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     public Income(BigDecimal amount, String description, LocalDate createdAt, boolean isContinuous, Category category, String source, User user) {

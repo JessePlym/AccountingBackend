@@ -1,13 +1,15 @@
 package p.jesse.accountor.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+import p.jesse.accountor.entities.Income;
 import p.jesse.accountor.entities.Payment;
+import p.jesse.accountor.service.IncomeService;
 import p.jesse.accountor.service.PaymentService;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin
@@ -15,13 +17,33 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final IncomeService incomeService;
 
-    public PaymentController(PaymentService paymentService) {
+    public PaymentController(PaymentService paymentService, IncomeService incomeService) {
         this.paymentService = paymentService;
+        this.incomeService = incomeService;
     }
 
     @GetMapping
     public List<Payment> getAllPayments() {
         return paymentService.getAllPayments();
     }
+
+    @GetMapping("/user/income")
+    public List<Income> getAllIncomeByUser(Authentication authentication) {
+        return incomeService.getAllIncomeByUser(authentication);
+    }
+
+    @PostMapping("user/income/new-entry")
+    public ResponseEntity<String> addNewIncomeEntry(@RequestBody Income incomeRequest, Authentication authentication) {
+        return incomeService.addNewIncomeEntry(incomeRequest, authentication);
+    }
+
+    @PutMapping("user/income/{id}")
+    public ResponseEntity<Object> updateIncomeEntry(@PathVariable("id") Long id, @RequestBody Income updateRequest, Authentication authentication) {
+        return incomeService.updateIncomeEntry(id, updateRequest, authentication);
+    }
+
+    // TODO: deletemapping
+
 }

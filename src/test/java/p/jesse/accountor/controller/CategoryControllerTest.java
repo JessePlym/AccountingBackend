@@ -1,6 +1,7 @@
 package p.jesse.accountor.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -33,6 +34,11 @@ class CategoryControllerTest {
     @Autowired
     private JwtService jwtService;
 
+    @AfterEach
+    void tearDown() {
+        categoryRepository.deleteAll();
+    }
+
     @Test
     void shouldReturnAllCategories() throws Exception{
         String token = jwtService.generateToken(new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER));
@@ -57,9 +63,9 @@ class CategoryControllerTest {
     @Test
     void shouldDeleteCategory() throws Exception {
         String token = jwtService.generateToken(new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER));
-        Category category = new Category("hobby");
+        Category category = new Category("salary");
         categoryRepository.save(category);
-        Long id = categoryRepository.findByName("hobby").get().getId();
+        Long id = categoryRepository.findByName("salary").get().getId();
 
         mockMvc.perform(delete("/api/categories/" + id)
                 .header("Authorization", "Bearer " + token))

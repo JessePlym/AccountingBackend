@@ -94,7 +94,7 @@ class UserServiceTest {
     void shouldDeleteUserWith204StatusCode() {
         User existingUser = new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER);
         when(userRepository.findById(Mockito.any())).thenReturn(Optional.of(existingUser));
-        ResponseEntity<String> actualResult = userService.deleteUser(existingUser.getId(), new BearerTokenAuthenticationToken(existingUser.getUsername()));
+        ResponseEntity<Object> actualResult = userService.deleteUser(existingUser.getId(), new BearerTokenAuthenticationToken(existingUser.getUsername()));
 
         assertThat(actualResult.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
         verify(userRepository).deleteById(Mockito.any());
@@ -103,7 +103,7 @@ class UserServiceTest {
     @Test
     void shouldReturn403StatusCodeIfNotCorrectUserAuthenticated() {
         when(userRepository.findById(Mockito.any())).thenReturn(Optional.of(new User()));
-        ResponseEntity<String> actualResult = userService.deleteUser(null, new BearerTokenAuthenticationToken("ABC123"));
+        ResponseEntity<Object> actualResult = userService.deleteUser(null, new BearerTokenAuthenticationToken("ABC123"));
 
         assertThat(actualResult.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
     }
@@ -112,9 +112,9 @@ class UserServiceTest {
     void shouldReturn400IfBadUserIdWhenDeletingUser() {
         User existingUser = new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER);
         when(userRepository.findById(Mockito.any())).thenReturn(Optional.empty());
-        ResponseEntity<String> actualResult = userService.deleteUser(-1L, new BearerTokenAuthenticationToken(existingUser.getUsername()));
+        ResponseEntity<Object> actualResult = userService.deleteUser(-1L, new BearerTokenAuthenticationToken(existingUser.getUsername()));
 
-        assertThat(actualResult.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(actualResult.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(actualResult.getBody()).isEqualTo("User with given id does not exist");
     }
 

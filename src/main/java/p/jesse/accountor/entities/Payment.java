@@ -1,6 +1,7 @@
 package p.jesse.accountor.entities;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.Authentication;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -75,6 +76,14 @@ public class Payment {
 
     public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public boolean isContinuous() {
+        return isContinuous;
+    }
+
+    public void setContinuous(boolean continuous) {
+        isContinuous = continuous;
     }
 
     public Category getCategory() {

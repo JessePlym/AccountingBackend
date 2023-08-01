@@ -73,7 +73,8 @@ public class CreateTestData {
         incomeRepository.deleteAll();
 
         Income testIncome1 = new Income(new BigDecimal(2000), "palkka", LocalDate.now(), false, categoryRepository.findByName("salary").get(), "Caseum Oy", userRepository.findByUsername("Plymander").get());
-        incomeRepository.save(testIncome1);
+        Income testIncome2 = new Income(new BigDecimal(2000), "palkka", LocalDate.now(), false, categoryRepository.findByName("salary").get(), "Caseum Oy", userRepository.findByUsername("admin").get());
+        incomeRepository.saveAll(List.of(testIncome1, testIncome2));
     }
 
 }

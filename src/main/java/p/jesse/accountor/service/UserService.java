@@ -15,6 +15,8 @@ import p.jesse.accountor.utils.PasswordHash;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -64,16 +66,16 @@ public class UserService implements UserDetailsService {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    public ResponseEntity<String> deleteUser(Long id, Authentication authentication) {
-        try {
-            if (authentication.getName().equals(userRepository.findById(id).get().getUsername())) {
+    public ResponseEntity<Object> deleteUser(Long id, Authentication authentication) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        return optionalUser.map(deletedUser -> {
+            if (authentication.getName().equals(deletedUser.getUsername())) {
                 userRepository.deleteById(id);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } else {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             }
-        } catch (NoSuchElementException e) {
-            return new ResponseEntity<>("User with given id does not exist", HttpStatus.BAD_REQUEST);
-        }
+        }).orElse(new ResponseEntity<>("User with given id does not exist", HttpStatus.NOT_FOUND));
     }
 }
