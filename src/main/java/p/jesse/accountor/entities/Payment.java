@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-public class Transaction {
+public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false)
+    @Column(updatable = false, name = "payment_id")
     private Long id;
 
     @Column(nullable = false)
@@ -19,19 +19,22 @@ public class Transaction {
     private String description;
 
     private LocalDate createdAt, updatedAt;
+    private boolean isContinuous;
 
     @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
-    public Transaction(double amount, String description, LocalDate createdAt, Category category) {
+    public Payment(double amount, String description, LocalDate createdAt, boolean isContinuous, Category category) {
         this.amount = amount;
         this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = createdAt;
+        this.isContinuous = isContinuous;
         this.category = category;
     }
 
-    public Transaction() {}
+    public Payment() {}
 
     public Long getId() {
         return id;

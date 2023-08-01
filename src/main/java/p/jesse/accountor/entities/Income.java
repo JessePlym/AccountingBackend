@@ -6,15 +6,15 @@ import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
 
 @Entity
-public class Income extends Transaction {
+public class Income extends Payment {
 
     private String source;
 
     @ManyToOne
     private User user;
 
-    public Income(double amount, String description, LocalDate createdAt, Category category, String source, User user) {
-        super(amount, description, createdAt, category);
+    public Income(double amount, String description, LocalDate createdAt, boolean isContinuous, Category category, String source, User user) {
+        super(amount, description, createdAt, isContinuous, category);
         this.source = source;
         this.user = user;
     }

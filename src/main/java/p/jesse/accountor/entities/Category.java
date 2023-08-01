@@ -2,6 +2,7 @@ package p.jesse.accountor.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -9,18 +10,18 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false)
+    @Column(updatable = false, name = "category_id")
     private Long id;
 
     @Column(nullable = false, unique = true)
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
-    private List<Transaction> transactions;
+    private List<Payment> payments;
 
-    public Category(String name, List<Transaction> transactions) {
+    public Category(String name) {
         this.name = name;
-        this.transactions = transactions;
+        this.payments = new ArrayList<>();
     }
 
     public Category() {}
@@ -41,11 +42,11 @@ public class Category {
         this.name = name;
     }
 
-    public List<Transaction> getTransactions() {
-        return transactions;
+    public List<Payment> getTransactions() {
+        return payments;
     }
 
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
     }
 }

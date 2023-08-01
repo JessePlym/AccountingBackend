@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import p.jesse.accountor.records.RsaKeyProperties;
-import p.jesse.accountor.utils.CreateUser;
+import p.jesse.accountor.utils.CreateTestData;
 
 @SpringBootApplication
 @EnableConfigurationProperties(RsaKeyProperties.class)
@@ -19,9 +19,9 @@ public class AccountorApplication {
 
 	@Bean
 	@Profile("!test")
-	public CommandLineRunner commandLineRunner(CreateUser createUser) {
+	public CommandLineRunner commandLineRunner(CreateTestData createTestData) {
 		return args -> {
-			createUser.createTestUsers();
+			createTestData.create();
 		};
 	}
 }
