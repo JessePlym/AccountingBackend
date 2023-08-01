@@ -29,8 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {CategoryService.class})
 @ExtendWith(MockitoExtension.class)
@@ -82,6 +81,19 @@ class CategoryServiceTest {
     }
 
     @Test
-    void deleteCategory() {
+    void shouldDeleteCategoryWithGivenId() {
+        Long id = 1L;
+        when(categoryRepository.existsById(Mockito.any())).thenReturn(true);
+
+        categoryService.deleteCategory(id);
+        verify(categoryRepository).deleteById(Mockito.any());
+    }
+
+    @Test
+    void shouldDoNothingIdCategoryIdNotExists() {
+        Long id = 1L;
+        when(categoryRepository.existsById(Mockito.any())).thenReturn(false);
+        categoryService.deleteCategory(id);
+        verify(categoryRepository, times(0)).deleteById(Mockito.any());
     }
 }
