@@ -2,6 +2,7 @@ package p.jesse.accountor.entities;
 
 import jakarta.persistence.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -13,7 +14,7 @@ public class Payment {
     private Long id;
 
     @Column(nullable = false)
-    private double amount;
+    private BigDecimal amount;
 
     @Column(nullable = false)
     private String description;
@@ -25,7 +26,7 @@ public class Payment {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public Payment(double amount, String description, LocalDate createdAt, boolean isContinuous, Category category) {
+    public Payment(BigDecimal amount, String description, LocalDate createdAt, boolean isContinuous, Category category) {
         this.amount = amount;
         this.description = description;
         this.createdAt = createdAt;
@@ -44,11 +45,11 @@ public class Payment {
         this.id = id;
     }
 
-    public double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

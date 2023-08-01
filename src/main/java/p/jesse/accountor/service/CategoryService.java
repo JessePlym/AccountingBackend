@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import p.jesse.accountor.entities.Category;
 import p.jesse.accountor.repositories.CategoryRepository;
 
+import java.net.http.HttpResponse;
 import java.util.List;
 
 @Service

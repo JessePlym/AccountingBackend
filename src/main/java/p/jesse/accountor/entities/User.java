@@ -38,9 +38,11 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     private List<Expense> expenses;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+    @JsonIgnore
     private List<Income> incomes;
 
     public User(String firstName, String lastName, String username, String password, LocalDate registerDate, Role role) {

@@ -73,7 +73,7 @@ class CategoryServiceTest {
     @Test
     void shouldThrowAndReturn400IfCategoryAlreadyExists() {
         Category newCategory = new Category("purchase");
-        when(categoryRepository.findByName(Mockito.anyString())).thenReturn(Optional.of(newCategory));
+        when(categoryRepository.findByName(Mockito.anyString())).thenReturn(Optional.of(new Category()));
 
         assertThrows(DataIntegrityViolationException.class,
                 () -> categoryService.addNewCategory(newCategory),

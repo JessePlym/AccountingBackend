@@ -1,6 +1,9 @@
 package p.jesse.accountor.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +17,12 @@ public class Category {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @NotEmpty
+    @NotBlank
     private String name;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+    @JsonIgnore
     private List<Payment> payments;
 
     public Category(String name) {
@@ -42,7 +48,7 @@ public class Category {
         this.name = name;
     }
 
-    public List<Payment> getTransactions() {
+    public List<Payment> getPayments() {
         return payments;
     }
 
