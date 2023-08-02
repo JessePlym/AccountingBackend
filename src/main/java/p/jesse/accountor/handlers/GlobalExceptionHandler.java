@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.security.auth.login.CredentialException;
 
 @RestControllerAdvice
-public class RestExceptionHandler {
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(CredentialException.class)
     public ResponseEntity<String> handleCredentialException(CredentialException e) {

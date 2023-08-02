@@ -41,7 +41,7 @@ public class ExpenseService {
 
     public List<Expense> getAllExpensesOfUserByReceiver(Authentication authentication, String receiver) {
         User user = authChecker.extractUser(authentication, userRepository);
-        return expenseRepository.findAllByUserAndReceiverOrderByCreatedAt(user, receiver);
+        return expenseRepository.findAllByUserAndReceiverOrderByCreatedAt(user, receiver.trim().replace("_", " "));
     }
 
     @Transactional
@@ -53,6 +53,7 @@ public class ExpenseService {
         savedExpense.setDescription(expenseRequest.getDescription());
         savedExpense.setCreatedAt(LocalDate.now());
         savedExpense.setUpdatedAt(LocalDate.now());
+        savedExpense.setContinuous(expenseRequest.isContinuous());
         savedExpense.setCategory(expenseRequest.getCategory());
         savedExpense.setReceiver(expenseRequest.getReceiver());
         savedExpense.setUser(user);
@@ -72,6 +73,7 @@ public class ExpenseService {
                 updatedExpense.setUpdatedAt(LocalDate.now());
                 updatedExpense.setAmount(updateRequest.getAmount());
                 updatedExpense.setDescription(updateRequest.getDescription());
+                updatedExpense.setContinuous(updatedExpense.isContinuous());
                 updatedExpense.setReceiver(updatedExpense.getReceiver());
                 updatedExpense.setCategory(updateRequest.getCategory());
                 expenseRepository.save(updatedExpense);

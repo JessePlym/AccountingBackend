@@ -41,7 +41,7 @@ public class IncomeService {
 
     public List<Income> getAllIncomeOfUserBySource(Authentication authentication, String source) {
         User user = authChecker.extractUser(authentication, userRepository);
-        return incomeRepository.findAllByUserAndSourceOrderByCreatedAt(user, source.replace("_", " "));
+        return incomeRepository.findAllByUserAndSourceOrderByCreatedAt(user, source.trim().replace("_", " "));
     }
 
     @Transactional
@@ -53,6 +53,7 @@ public class IncomeService {
         savedIncome.setDescription(incomeRequest.getDescription());
         savedIncome.setCreatedAt(LocalDate.now());
         savedIncome.setUpdatedAt(LocalDate.now());
+        savedIncome.setContinuous(incomeRequest.isContinuous());
         savedIncome.setCategory(incomeRequest.getCategory());
         savedIncome.setSource(incomeRequest.getSource());
         savedIncome.setUser(user);
@@ -72,10 +73,11 @@ public class IncomeService {
                 updatedIncome.setUpdatedAt(LocalDate.now());
                 updatedIncome.setAmount(updateRequest.getAmount());
                 updatedIncome.setDescription(updateRequest.getDescription());
+                updatedIncome.setContinuous(updateRequest.isContinuous());
                 updatedIncome.setSource(updateRequest.getSource());
                 updatedIncome.setCategory(updateRequest.getCategory());
                 incomeRepository.save(updatedIncome);
-                return new ResponseEntity<String>(HttpStatus.OK);
+                return new ResponseEntity<String>("Updated successfully!", HttpStatus.OK);
             }
         }).orElse(new ResponseEntity<>("No entries found with given id", HttpStatus.NOT_FOUND));
     }
