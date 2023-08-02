@@ -1,6 +1,5 @@
 package p.jesse.accountor.service;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,8 +13,6 @@ import org.springframework.test.context.ContextConfiguration;
 import p.jesse.accountor.entities.Payment;
 import p.jesse.accountor.entities.User;
 import p.jesse.accountor.enums.Role;
-import p.jesse.accountor.repositories.ExpenseRepository;
-import p.jesse.accountor.repositories.IncomeRepository;
 import p.jesse.accountor.repositories.PaymentRepository;
 import p.jesse.accountor.repositories.UserRepository;
 import p.jesse.accountor.utils.AuthChecker;
@@ -25,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration(classes = {PaymentService.class})
