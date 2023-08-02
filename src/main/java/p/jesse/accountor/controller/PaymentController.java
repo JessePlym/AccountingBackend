@@ -3,6 +3,7 @@ package p.jesse.accountor.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import p.jesse.accountor.entities.Category;
 import p.jesse.accountor.entities.Income;
 import p.jesse.accountor.entities.Payment;
 import p.jesse.accountor.service.IncomeService;
@@ -34,16 +35,24 @@ public class PaymentController {
         return incomeService.getAllIncomeByUser(authentication);
     }
 
-    @PostMapping("user/income/new-entry")
+    @GetMapping("/user/income/by-category")
+    public List<Income> getAllIncomeOfUserByCategory(@RequestParam(name = "category-id", required = true) Category category, Authentication authentication) {
+        return incomeService.getAllIncomeOfUserByCategory(authentication, category);
+    }
+
+    @PostMapping("/user/income/new-entry")
     public ResponseEntity<String> addNewIncomeEntry(@RequestBody Income incomeRequest, Authentication authentication) {
         return incomeService.addNewIncomeEntry(incomeRequest, authentication);
     }
 
-    @PutMapping("user/income/{id}")
-    public ResponseEntity<Object> updateIncomeEntry(@PathVariable("id") Long id, @RequestBody Income updateRequest, Authentication authentication) {
+    @PutMapping("/user/income/{id}")
+    public ResponseEntity<String> updateIncomeEntry(@PathVariable("id") Long id, @RequestBody Income updateRequest, Authentication authentication) {
         return incomeService.updateIncomeEntry(id, updateRequest, authentication);
     }
 
-    // TODO: deletemapping
+    @DeleteMapping("/user/income/{id}")
+    public ResponseEntity<String> deleteIncomeEntry(@PathVariable("id") Long id, Authentication authentication) {
+        return incomeService.deleteIncomeEntry(id, authentication);
+    }
 
 }

@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import p.jesse.accountor.entities.Category;
 import p.jesse.accountor.entities.Income;
-import p.jesse.accountor.entities.Payment;
 import p.jesse.accountor.entities.User;
 import p.jesse.accountor.repositories.IncomeRepository;
 import p.jesse.accountor.repositories.UserRepository;
@@ -28,15 +28,19 @@ public class IncomeService {
     }
 
     public List<Income> getAllIncomeByUser(Authentication authentication) {
-        User user = userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+        User user = extractUser(authentication, userRepository);
         return incomeRepository.findAllByUser(user);
+    }
+
+    public List<Income> getAllIncomeOfUserByCategory(Authentication authentication, Category category) {
+        User user = extractUser(authentication, userRepository);
+        return incomeRepository.findAllByUserAndCategoryOrderByCreatedAt(user, category);
     }
 
     @Transactional
     public ResponseEntity<String> addNewIncomeEntry(Income incomeRequest, Authentication authentication) {
-        User user = userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+        User user = extractUser(authentication, userRepository);
+
         Income savedIncome = new Income();
         savedIncome.setAmount(incomeRequest.getAmount());
         savedIncome.setDescription(incomeRequest.getDescription());
@@ -51,12 +55,12 @@ public class IncomeService {
     }
 
     @Transactional
-    public ResponseEntity<Object> updateIncomeEntry(Long id, Income updateRequest, Authentication authentication) {
+    public ResponseEntity<String> updateIncomeEntry(Long id, Income updateRequest, Authentication authentication) {
         Optional<Income> optionalIncome = incomeRepository.findById(id);
 
         return optionalIncome.map(updatedIncome -> {
-            if (!isCorrectUserAuthenticated(updatedIncome.getUser().getUsername(), authentication)) {
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            if (isCorrectUserAuthenticated(updatedIncome.getUser().getUsername(), authentication)) {
+                return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
             } else {
                 updatedIncome.setUpdatedAt(LocalDate.now());
                 updatedIncome.setAmount(updateRequest.getAmount());
@@ -64,7 +68,7 @@ public class IncomeService {
                 updatedIncome.setSource(updateRequest.getSource());
                 updatedIncome.setCategory(updateRequest.getCategory());
                 incomeRepository.save(updatedIncome);
-                return new ResponseEntity<>(HttpStatus.OK);
+                return new ResponseEntity<String>(HttpStatus.OK);
             }
         }).orElse(new ResponseEntity<>("No entries found with given id", HttpStatus.NOT_FOUND));
     }
@@ -73,7 +77,7 @@ public class IncomeService {
         Optional<Income> optionalIncome = incomeRepository.findById(id);
 
         return optionalIncome.map(deletedIncome -> {
-            if (!isCorrectUserAuthenticated(deletedIncome.getUser().getUsername(), authentication)) {
+            if (isCorrectUserAuthenticated(deletedIncome.getUser().getUsername(), authentication)) {
                 return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
             }
             incomeRepository.deleteById(deletedIncome.getId());
@@ -82,7 +86,12 @@ public class IncomeService {
 
     }
 
+    private static User extractUser(Authentication authentication, UserRepository userRepository) {
+        return userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+    }
+
     private static boolean isCorrectUserAuthenticated(String username, Authentication authentication) {
-        return username.equals(authentication.getName());
+        return !username.equals(authentication.getName());
     }
 }

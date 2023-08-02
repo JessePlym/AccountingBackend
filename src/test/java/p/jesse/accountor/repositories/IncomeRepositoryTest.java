@@ -16,6 +16,7 @@ import p.jesse.accountor.enums.Role;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,6 +34,13 @@ class IncomeRepositoryTest {
     private UserRepository userRepository;
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @AfterEach
+    void tearDown() {
+        incomeRepository.deleteAll();
+        userRepository.deleteAll();
+        categoryRepository.deleteAll();
+    }
 
     @Test
     void shouldFindAllIncomeByUser() {
@@ -62,5 +70,42 @@ class IncomeRepositoryTest {
         assertThat(actualIncome).isEqualTo(income);
         assertThat(actualIncome.getUser().getUsername()).isEqualTo(user.getUsername());
         assertThat(incomeRepository.findAllByUser(user)).hasSize(1);
+    }
+
+    @Test
+    void shouldFindAllIncomeByCategoryOrderedByDate() {
+        User user = new User(
+                "Jesse",
+                "Plym",
+                "username",
+                "asd123456",
+                LocalDate.now(),
+                Role.USER);
+        userRepository.save(user);
+        Category category = new Category("some_category");
+        categoryRepository.save(category);
+        Income income1 = new Income(
+                new BigDecimal(200),
+                "bill",
+                LocalDate.now().plusDays(10),
+                false,
+                category,
+                "no source",
+                user
+        );
+        Income income2 = new Income(
+                new BigDecimal(200),
+                "bill",
+                LocalDate.now(),
+                false,
+                category,
+                "no source",
+                user
+        );
+        incomeRepository.saveAll(List.of(income1, income2));
+        List<Income> actualIncomeList = incomeRepository.findAllByUserAndCategoryOrderByCreatedAt(user, category);
+        assertThat(actualIncomeList).hasSize(2);
+        assertThat(actualIncomeList.get(0)).isEqualTo(income2);
+        assertThat(actualIncomeList).allMatch(income -> user.equals(income.getUser()));
     }
 }

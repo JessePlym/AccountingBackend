@@ -74,7 +74,10 @@ public class CreateTestData {
 
         Income testIncome1 = new Income(new BigDecimal(2000), "palkka", LocalDate.now(), false, categoryRepository.findByName("salary").get(), "Caseum Oy", userRepository.findByUsername("Plymander").get());
         Income testIncome2 = new Income(new BigDecimal(2000), "palkka", LocalDate.now(), false, categoryRepository.findByName("salary").get(), "Caseum Oy", userRepository.findByUsername("admin").get());
-        incomeRepository.saveAll(List.of(testIncome1, testIncome2));
+        Income testIncome3 = new Income(new BigDecimal(2500), "palkka", LocalDate.now().plusMonths(1), false, categoryRepository.findByName("salary").get(), "Caseum Oy", userRepository.findByUsername("Plymander").get());
+        Income testIncome4 = new Income(new BigDecimal(2240), "palkka", LocalDate.now().plusMonths(2), false, categoryRepository.findByName("salary").get(), "Caseum Oy", userRepository.findByUsername("Plymander").get());
+
+        incomeRepository.saveAll(List.of(testIncome1, testIncome2, testIncome3, testIncome4));
     }
 
 }
