@@ -1,14 +1,8 @@
 package p.jesse.accountor.utils;
 
 import org.springframework.stereotype.Component;
-import p.jesse.accountor.entities.Category;
-import p.jesse.accountor.entities.Income;
-import p.jesse.accountor.entities.Payment;
-import p.jesse.accountor.entities.User;
-import p.jesse.accountor.repositories.CategoryRepository;
-import p.jesse.accountor.repositories.IncomeRepository;
-import p.jesse.accountor.repositories.PaymentRepository;
-import p.jesse.accountor.repositories.UserRepository;
+import p.jesse.accountor.entities.*;
+import p.jesse.accountor.repositories.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,23 +16,24 @@ public class CreateTestData {
 
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
-    private final PaymentRepository paymentRepository;
     private final IncomeRepository incomeRepository;
+    private final ExpenseRepository expenseRepository;
 
     private final PasswordHash passwordHash;
 
-    public CreateTestData(UserRepository userRepository, CategoryRepository categoryRepository, PaymentRepository paymentRepository, IncomeRepository incomeRepository, PasswordHash passwordHash) {
+    public CreateTestData(UserRepository userRepository, CategoryRepository categoryRepository, IncomeRepository incomeRepository, PasswordHash passwordHash,
+                          ExpenseRepository expenseRepository) {
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
-        this.paymentRepository = paymentRepository;
         this.incomeRepository = incomeRepository;
         this.passwordHash = passwordHash;
+        this.expenseRepository = expenseRepository;
     }
 
     public void create() {
         createTestUsers();
         createTestCategories();
-        createTestPayments();
+        createTestExpenses();
         createTestIncome();
     }
 
@@ -56,11 +51,19 @@ public class CreateTestData {
 
         Category testCategory1 = new Category("salary");
         Category testCategory2 = new Category("bill");
+        Category testCategory3 = new Category("purchase");
 
-        categoryRepository.saveAll(List.of(testCategory1, testCategory2));
+
+        categoryRepository.saveAll(List.of(testCategory1, testCategory2, testCategory3));
     }
 
-    public void createTestPayments() {
+    public void createTestExpenses() {
+        expenseRepository.deleteAll();
+
+        Expense testExpense1 = new Expense(new BigDecimal(100), "lasku", LocalDate.now(), true, categoryRepository.findByName("bill").get(), "Elisa", userRepository.findByUsername("Plymander").get());
+        Expense testExpense2 = new Expense(new BigDecimal(10), "ostos", LocalDate.now().plusDays(10), false, categoryRepository.findByName("purchase").get(), "K-market", userRepository.findByUsername("Plymander").get());
+
+        expenseRepository.saveAll(List.of(testExpense1, testExpense2));
 
     }
 

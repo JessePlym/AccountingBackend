@@ -42,7 +42,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/api/users").hasAuthority("SCOPE_ADMIN");
-                    auth.requestMatchers(HttpMethod.GET, "/api/payments").hasAuthority("SCOPE_ADMIN");
+                    auth.requestMatchers(HttpMethod.GET, "/api/user/payments/all").hasAuthority("SCOPE_ADMIN");
                     //auth.requestMatchers("/api/payments/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
