@@ -12,14 +12,9 @@ public class Income extends Payment {
 
     private String source;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    public Income(BigDecimal amount, String description, LocalDate createdAt, boolean isContinuous, Category category, String source, User user) {
-        super(amount, description, createdAt, isContinuous, category);
+    public Income(BigDecimal amount, String description, LocalDate createdAt, boolean isContinuous, Category category, User user, String source) {
+        super(amount, description, createdAt, isContinuous, category, user);
         this.source = source;
-        this.user = user;
     }
 
     public Income() {}
@@ -32,11 +27,4 @@ public class Income extends Payment {
         this.source = source;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

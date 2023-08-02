@@ -27,13 +27,18 @@ public class Payment {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    public Payment(BigDecimal amount, String description, LocalDate createdAt, boolean isContinuous, Category category) {
+    @ManyToOne
+    @JoinColumn(name = "users_id")
+    private User user;
+
+    public Payment(BigDecimal amount, String description, LocalDate createdAt, boolean isContinuous, Category category, User user) {
         this.amount = amount;
         this.description = description;
         this.createdAt = createdAt;
         this.updatedAt = createdAt;
         this.isContinuous = isContinuous;
         this.category = category;
+        this.user = user;
     }
 
     public Payment() {}
@@ -92,5 +97,13 @@ public class Payment {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

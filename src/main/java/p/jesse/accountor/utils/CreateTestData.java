@@ -61,21 +61,16 @@ public class CreateTestData {
     }
 
     public void createTestPayments() {
-        paymentRepository.deleteAll();
 
-        Payment testPayment1 = new Payment(new BigDecimal(50.0), "monthly wage", LocalDate.now(), true, categoryRepository.findByName("salary").get());
-        Payment testPayment2 = new Payment(new BigDecimal(100.0), "electric bill", LocalDate.now().plusDays(5), false, categoryRepository.findByName("bill").get());
-
-        paymentRepository.saveAll(List.of(testPayment1, testPayment2));
     }
 
     public void createTestIncome() {
         incomeRepository.deleteAll();
 
-        Income testIncome1 = new Income(new BigDecimal(2000), "palkka", LocalDate.now(), false, categoryRepository.findByName("salary").get(), "Caseum Oy", userRepository.findByUsername("Plymander").get());
-        Income testIncome2 = new Income(new BigDecimal(2000), "palkka", LocalDate.now(), false, categoryRepository.findByName("salary").get(), "Caseum Oy", userRepository.findByUsername("admin").get());
-        Income testIncome3 = new Income(new BigDecimal(2500), "palkka", LocalDate.now().plusMonths(1), false, categoryRepository.findByName("salary").get(), "Caseum Oy", userRepository.findByUsername("Plymander").get());
-        Income testIncome4 = new Income(new BigDecimal(2240), "palkka", LocalDate.now().plusMonths(2), false, categoryRepository.findByName("salary").get(), "Caseum Oy", userRepository.findByUsername("Plymander").get());
+        Income testIncome1 = new Income(new BigDecimal(2000), "palkka", LocalDate.now(), false, categoryRepository.findByName("salary").get(), userRepository.findByUsername("Plymander").get(), "Caseum Oy");
+        Income testIncome2 = new Income(new BigDecimal(2000), "palkka", LocalDate.now(), false, categoryRepository.findByName("salary").get(), userRepository.findByUsername("admin").get(), "Caseum Oy");
+        Income testIncome3 = new Income(new BigDecimal(2500), "palkka", LocalDate.now().plusMonths(1), false, categoryRepository.findByName("salary").get(), userRepository.findByUsername("Plymander").get(), "Caseum Oy");
+        Income testIncome4 = new Income(new BigDecimal(2240), "palkka", LocalDate.now().plusMonths(2), false, categoryRepository.findByName("salary").get(), userRepository.findByUsername("Plymander").get(), "Caseum Oy");
 
         incomeRepository.saveAll(List.of(testIncome1, testIncome2, testIncome3, testIncome4));
     }

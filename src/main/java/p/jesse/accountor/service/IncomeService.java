@@ -37,6 +37,11 @@ public class IncomeService {
         return incomeRepository.findAllByUserAndCategoryOrderByCreatedAt(user, category);
     }
 
+    public List<Income> getAllIncomeOfUserBySource(Authentication authentication, String source) {
+        User user = extractUser(authentication, userRepository);
+        return incomeRepository.findAllByUserAndSourceOrderByCreatedAt(user, source.replace("_", " "));
+    }
+
     @Transactional
     public ResponseEntity<String> addNewIncomeEntry(Income incomeRequest, Authentication authentication) {
         User user = extractUser(authentication, userRepository);

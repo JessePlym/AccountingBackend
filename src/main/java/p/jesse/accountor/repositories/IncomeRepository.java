@@ -17,4 +17,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
 
     @Query("select i from Income i where i.user = ?1 and i.category = ?2 order by i.createdAt")
     List<Income> findAllByUserAndCategoryOrderByCreatedAt(User user, Category category);
+
+    @Query("select i from Income i where i.user = ?1 and i.source = ?2 order by i.createdAt")
+    List<Income> findAllByUserAndSourceOrderByCreatedAt(User user, String source);
 }

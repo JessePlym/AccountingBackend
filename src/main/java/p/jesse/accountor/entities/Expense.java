@@ -1,7 +1,7 @@
 package p.jesse.accountor.entities;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,21 +9,21 @@ import java.time.LocalDate;
 @Entity
 public class Expense extends Payment {
 
-    @ManyToOne
-    private User user;
+    @NotBlank
+    private String receiver;
 
-    public Expense(BigDecimal amount, String description, LocalDate createdAt, boolean isContinuous, Category category, User user) {
-        super(amount, description, createdAt, isContinuous, category);
-        this.user = user;
+    public Expense(BigDecimal amount, String description, LocalDate createdAt, boolean isContinuous, Category category, String receiver, User user) {
+        super(amount, description, createdAt, isContinuous, category, user);
+        this.receiver = receiver;
     }
 
     public Expense() {}
 
-    public User getUser() {
-        return user;
+    public String getReceiver() {
+        return receiver;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setReceiver(String receiver) {
+        this.receiver = receiver;
     }
 }

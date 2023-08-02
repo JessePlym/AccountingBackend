@@ -10,7 +10,6 @@ import p.jesse.accountor.service.IncomeService;
 import p.jesse.accountor.service.PaymentService;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @CrossOrigin
@@ -38,6 +37,11 @@ public class PaymentController {
     @GetMapping("/user/income/by-category")
     public List<Income> getAllIncomeOfUserByCategory(@RequestParam(name = "category-id", required = true) Category category, Authentication authentication) {
         return incomeService.getAllIncomeOfUserByCategory(authentication, category);
+    }
+
+    @GetMapping("/user/income/by-source")
+    public List<Income> getAllIncomeOfUserBySource(@RequestParam(name = "source", required = true) String source, Authentication authentication) {
+        return incomeService.getAllIncomeOfUserBySource(authentication, source);
     }
 
     @PostMapping("/user/income/new-entry")

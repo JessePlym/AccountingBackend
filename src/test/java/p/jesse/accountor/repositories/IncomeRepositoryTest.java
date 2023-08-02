@@ -60,8 +60,8 @@ class IncomeRepositoryTest {
                 LocalDate.now(),
                 false,
                 category,
-                "no source",
-                user
+                user,
+                "no source"
         );
         incomeRepository.save(income);
 
@@ -90,8 +90,8 @@ class IncomeRepositoryTest {
                 LocalDate.now().plusDays(10),
                 false,
                 category,
-                "no source",
-                user
+                user,
+                "no source"
         );
         Income income2 = new Income(
                 new BigDecimal(200),
@@ -99,13 +99,51 @@ class IncomeRepositoryTest {
                 LocalDate.now(),
                 false,
                 category,
-                "no source",
-                user
+                user,
+                "no source"
         );
         incomeRepository.saveAll(List.of(income1, income2));
         List<Income> actualIncomeList = incomeRepository.findAllByUserAndCategoryOrderByCreatedAt(user, category);
         assertThat(actualIncomeList).hasSize(2);
         assertThat(actualIncomeList.get(0)).isEqualTo(income2);
+        assertThat(actualIncomeList).allMatch(income -> user.equals(income.getUser()));
+    }
+
+    @Test
+    void shouldFindIncomeByUserAndSourceOrderedByDate() {
+        User user = new User(
+                "Jesse",
+                "Plym",
+                "username",
+                "asd123456",
+                LocalDate.now(),
+                Role.USER);
+        userRepository.save(user);
+        String source = "some_source";
+        Category category = new Category("some_category");
+        categoryRepository.save(category);
+        Income income1 = new Income(
+                new BigDecimal(200),
+                "bill",
+                LocalDate.now().plusDays(10),
+                false,
+                category,
+                user,
+                source
+        );
+        Income income2 = new Income(
+                new BigDecimal(200),
+                "bill",
+                LocalDate.now(),
+                false,
+                category,
+                user,
+                "other_source"
+        );
+        incomeRepository.saveAll(List.of(income1, income2));
+        List<Income> actualIncomeList = incomeRepository.findAllByUserAndSourceOrderByCreatedAt(user, source);
+        assertThat(actualIncomeList).hasSize(1);
+        assertThat(actualIncomeList.get(0)).isEqualTo(income1);
         assertThat(actualIncomeList).allMatch(income -> user.equals(income.getUser()));
     }
 }
