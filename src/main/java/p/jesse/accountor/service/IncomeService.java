@@ -80,16 +80,4 @@ public class IncomeService {
         }).orElse(new ResponseEntity<>("No entries found with given id", HttpStatus.NOT_FOUND));
     }
 
-    public ResponseEntity<String> deleteIncomeEntry(Long id, Authentication authentication) {
-        Optional<Income> optionalIncome = incomeRepository.findById(id);
-
-        return optionalIncome.map(deletedIncome -> {
-            if (authChecker.isUserNotAuthenticated(deletedIncome.getUser().getUsername(), authentication)) {
-                return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
-            }
-            incomeRepository.deleteById(deletedIncome.getId());
-            return new ResponseEntity<>("Deleted successfully!", HttpStatus.NO_CONTENT);
-        }).orElse(new ResponseEntity<>("No entries found with given id", HttpStatus.NOT_FOUND));
-
-    }
 }

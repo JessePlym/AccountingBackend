@@ -59,9 +59,9 @@ public class PaymentController {
         return incomeService.updateIncomeEntry(id, updateRequest, authentication);
     }
 
-    @DeleteMapping("/income/{id}")
-    public ResponseEntity<String> deleteIncomeEntry(@PathVariable("id") Long id, Authentication authentication) {
-        return incomeService.deleteIncomeEntry(id, authentication);
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deletePaymentEntry(@PathVariable("id") Long id, Authentication authentication) {
+        return paymentService.deletePaymentEntry(id, authentication);
     }
 
 }
