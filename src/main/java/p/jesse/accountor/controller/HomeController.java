@@ -13,4 +13,9 @@ public class HomeController {
     public String home(Authentication authentication) {
         return "Home " + authentication.getName() + "\nRole " + authentication.getAuthorities();
     }
+
+    @GetMapping
+    public String index() {
+        return "App is running!";
+    }
 }
