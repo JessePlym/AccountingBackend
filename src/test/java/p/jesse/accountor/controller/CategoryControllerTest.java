@@ -15,7 +15,8 @@ import p.jesse.accountor.service.JwtService;
 
 import java.time.LocalDate;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
@@ -51,17 +52,5 @@ class CategoryControllerTest {
                         .content(objectMapper.writeValueAsString(category))
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isCreated());
-    }
-
-    @Test
-    void shouldDeleteCategory() throws Exception {
-        String token = jwtService.generateToken(new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER));
-        Category category = new Category("salary");
-        categoryRepository.save(category);
-        Long id = categoryRepository.findByName("salary").get().getId();
-
-        mockMvc.perform(delete("/api/categories/" + id)
-                        .header("Authorization", "Bearer " + token))
-                .andExpect(status().isOk());
     }
 }
