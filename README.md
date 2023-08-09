@@ -1,6 +1,6 @@
 # AccountingBackend
 
-Welcome to the documentation for the **AccountingBackend** - a backend application designed to support personal finance management within a fullstack application. This README provides an overview of the application, its features, and how it is built using the Spring Framework.
+Welcome to the documentation for the **AccountingBackend** - a backend application designed to support personal finance management within a fullstack application. This README provides an overview of the application.
 
 ## Introduction
 
