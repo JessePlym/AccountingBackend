@@ -13,9 +13,6 @@ import p.jesse.accountor.records.UserUpdateRequest;
 import p.jesse.accountor.repositories.UserRepository;
 import p.jesse.accountor.utils.PasswordHash;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -28,10 +25,6 @@ public class UserService implements UserDetailsService {
     public UserService(UserRepository userRepository, PasswordHash passwordHash) {
         this.userRepository = userRepository;
         this.passwordHash = passwordHash;
-    }
-
-    public List<User> getUsers() {
-        return userRepository.findAll();
     }
 
 

@@ -1,13 +1,11 @@
 package p.jesse.accountor.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import p.jesse.accountor.entities.Category;
 import p.jesse.accountor.entities.User;
@@ -21,7 +19,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc
-@ActiveProfiles("test")
 @SpringBootTest
 class CategoryControllerTest {
 
@@ -34,22 +31,18 @@ class CategoryControllerTest {
     @Autowired
     private JwtService jwtService;
 
-    @AfterEach
-    void tearDown() {
-        categoryRepository.deleteAll();
-    }
 
     @Test
-    void shouldReturnAllCategories() throws Exception{
+    void shouldReturnAllCategories() throws Exception {
         String token = jwtService.generateToken(new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER));
 
         mockMvc.perform(get("/api/categories")
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void shouldAddNewCategory() throws Exception{
+    void shouldAddNewCategory() throws Exception {
         String token = jwtService.generateToken(new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER));
         Category category = new Category("hobby");
 
@@ -68,7 +61,7 @@ class CategoryControllerTest {
         Long id = categoryRepository.findByName("salary").get().getId();
 
         mockMvc.perform(delete("/api/categories/" + id)
-                .header("Authorization", "Bearer " + token))
+                        .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk());
     }
 }

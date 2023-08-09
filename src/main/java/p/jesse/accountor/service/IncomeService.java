@@ -77,7 +77,7 @@ public class IncomeService {
                 updatedIncome.setSource(updateRequest.getSource());
                 updatedIncome.setCategory(updateRequest.getCategory());
                 incomeRepository.save(updatedIncome);
-                return new ResponseEntity<String>("Updated successfully!", HttpStatus.OK);
+                return new ResponseEntity<>("Updated successfully!", HttpStatus.OK);
             }
         }).orElse(new ResponseEntity<>("No entries found with given id", HttpStatus.NOT_FOUND));
     }

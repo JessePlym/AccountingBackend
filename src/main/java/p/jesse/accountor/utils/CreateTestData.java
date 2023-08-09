@@ -19,14 +19,11 @@ public class CreateTestData {
     private final IncomeRepository incomeRepository;
     private final ExpenseRepository expenseRepository;
 
-    private final PasswordHash passwordHash;
-
-    public CreateTestData(UserRepository userRepository, CategoryRepository categoryRepository, IncomeRepository incomeRepository, PasswordHash passwordHash,
+    public CreateTestData(UserRepository userRepository, CategoryRepository categoryRepository, IncomeRepository incomeRepository,
                           ExpenseRepository expenseRepository) {
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.incomeRepository = incomeRepository;
-        this.passwordHash = passwordHash;
         this.expenseRepository = expenseRepository;
     }
 
@@ -40,8 +37,8 @@ public class CreateTestData {
     public void createTestUsers() {
         userRepository.deleteAll();
 
-        User testUser1 = new User("Jesse", "Plym", "Plymander", passwordHash.encryptPassword("jplym1996"), LocalDate.now(), USER);
-        User testUser2 = new User("Admin", "Admin", "admin", passwordHash.encryptPassword("verysecret"), LocalDate.now(), ADMIN);
+        User testUser1 = new User("Jesse", "Plym", "Plymander", "$2a$12$ezJcPT2CabmojOmqvszaOOYz1W/oah9xMYQAlYf3bCvTSQR9llYke", LocalDate.now(), USER);
+        User testUser2 = new User("Admin", "Admin", "admin", "$2a$12$0g.r7XfFYfqKRv7xT2TYB.BGQVUxavASLdw12eAGhPH0fGAyHbVKK", LocalDate.now(), ADMIN);
 
         userRepository.saveAll(List.of(testUser1, testUser2));
     }

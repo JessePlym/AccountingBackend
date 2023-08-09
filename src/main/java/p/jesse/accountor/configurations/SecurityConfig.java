@@ -1,10 +1,6 @@
 package p.jesse.accountor.configurations;
 
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
+import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,28 +9,25 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import p.jesse.accountor.records.RsaKeyProperties;
+
+import javax.crypto.spec.SecretKeySpec;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-// source https://www.youtube.com/watch?v=KYNR5js2cXE
+// source https://www.youtube.com/watch?v=66DtzkhBlSA&t=1261s
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalAuthentication
 public class SecurityConfig {
 
-    private final RsaKeyProperties rsaKeyProperties;
-
-    public SecurityConfig(RsaKeyProperties rsaKeyProperties) {
-        this.rsaKeyProperties = rsaKeyProperties;
-    }
-
+    private final String SECRET_KEY = System.getenv("SECRET");
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception{
@@ -61,13 +54,14 @@ public class SecurityConfig {
 
     @Bean
     JwtDecoder jwtDecoder() {
-        return NimbusJwtDecoder.withPublicKey(rsaKeyProperties.publicKey()).build();
+        byte[] bytes = SECRET_KEY.getBytes();
+        SecretKeySpec originalKey = new SecretKeySpec(bytes, "RSA");
+        return NimbusJwtDecoder.withSecretKey(originalKey).macAlgorithm(MacAlgorithm.HS512).build();
     }
 
     @Bean
     JwtEncoder jwtEncoder() {
-        JWK jwk = new RSAKey.Builder(rsaKeyProperties.publicKey()).privateKey(rsaKeyProperties.privateKey()).build();
-        JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
-        return new NimbusJwtEncoder(jwkSource);
+        ImmutableSecret<SecurityContext> secret = new ImmutableSecret<>(SECRET_KEY.getBytes());
+        return new NimbusJwtEncoder(secret);
     }
 }

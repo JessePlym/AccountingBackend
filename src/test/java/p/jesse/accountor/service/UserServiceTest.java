@@ -85,12 +85,6 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldGetAllUsers() {
-        userService.getUsers();
-        Mockito.verify(userRepository).findAll();
-    }
-
-    @Test
     void shouldDeleteUserWith204StatusCode() {
         User existingUser = new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER);
         when(userRepository.findById(Mockito.any())).thenReturn(Optional.of(existingUser));

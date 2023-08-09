@@ -1,7 +1,6 @@
 package p.jesse.accountor.entities;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.Authentication;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
