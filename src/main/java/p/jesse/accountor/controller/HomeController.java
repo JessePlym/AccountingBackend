@@ -9,11 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/")
 public class HomeController {
 
-    @GetMapping("/index")
-    public String home(Authentication authentication) {
-        return "Home " + authentication.getName() + "\nRole " + authentication.getAuthorities();
-    }
-
     @GetMapping
     public String index() {
         return "App is running!";

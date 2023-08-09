@@ -22,6 +22,8 @@ import p.jesse.accountor.records.RsaKeyProperties;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+// source https://www.youtube.com/watch?v=KYNR5js2cXE
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalAuthentication
