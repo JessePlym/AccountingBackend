@@ -105,5 +105,32 @@ class ExpenseServiceTest {
         Expense capturedExpense = expenseArgumentCaptor.getValue();
         assertThat(capturedExpense.getDescription()).isEqualTo(updateRequest.getDescription());
         assertThat(actualResult.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(actualResult.getBody()).isEqualTo("Updated successfully!");
+    }
+    
+    @Test
+    void shouldReturn403IfUserNotAuthenticatedWhenUpdating() {
+        User existingUser = new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER);
+        Expense existingExpense = new Expense();
+        existingExpense.setUser(existingUser);
+        Long id = 1L;
+        Expense updateRequest = new Expense(new BigDecimal(10), "bill", LocalDate.now(), false, new Category(), "some_receiver", existingUser);
+        when(expenseRepository.findById(Mockito.any())).thenReturn(Optional.of(existingExpense));
+        when(authChecker.isUserNotAuthenticated(Mockito.any(), Mockito.any())).thenReturn(true);
+        ResponseEntity<String> actualResult = expenseService.updateExpenseEntry(id, updateRequest, new BearerTokenAuthenticationToken(existingUser.getUsername()));
+        assertThat(actualResult.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+    }
+
+    @Test
+    void shouldReturn404IfExpenseIdNotFoundWhenUpdating() {
+        User existingUser = new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER);
+        Expense existingExpense = new Expense();
+        existingExpense.setUser(existingUser);
+        Long id = 1L;
+        Expense updateRequest = new Expense(new BigDecimal(10), "bill", LocalDate.now(), false, new Category(), "some_receiver", existingUser);
+        when(expenseRepository.findById(Mockito.any())).thenReturn(Optional.empty());
+        ResponseEntity<String> actualResult = expenseService.updateExpenseEntry(id, updateRequest, new BearerTokenAuthenticationToken(existingUser.getUsername()));
+        assertThat(actualResult.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(actualResult.getBody()).isEqualTo("No entries found with given id");
     }
 }
