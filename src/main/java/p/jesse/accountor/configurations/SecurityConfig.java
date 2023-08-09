@@ -43,9 +43,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
-                    auth.requestMatchers(HttpMethod.GET, "/api/users").hasAuthority("SCOPE_ADMIN");
                     auth.requestMatchers(HttpMethod.GET, "/api/user/payments/all").hasAuthority("SCOPE_ADMIN");
-                    //auth.requestMatchers("/api/payments/**").permitAll();
+                    auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement(session -> {

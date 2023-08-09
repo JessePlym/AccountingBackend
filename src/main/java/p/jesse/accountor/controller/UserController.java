@@ -22,11 +22,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping
-    public List<User> getUsers() {
-        return userService.getUsers();
-    }
-
     @PutMapping("/current/update-details")
     public ResponseEntity<String> updateUserDetails(@RequestBody UserUpdateRequest userUpdateRequest, Authentication authentication) {
         return userService.updateUserDetails(userUpdateRequest, authentication);

@@ -48,16 +48,6 @@ class UserControllerTest {
         userRepository.save(user);
     }
 
-
-    @Test
-    void shouldReturnAllUsers() throws Exception {
-        String token = jwtService.generateToken(new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.ADMIN));
-
-        mockMvc.perform(get("/api/users")
-                .header("Authorization", "Bearer " + token))
-                .andExpect(status().isOk());
-    }
-
     @Test
     void shouldUpdateUserDetails() throws Exception{
         Optional<User> user = userRepository.findByUsername("jplym");
