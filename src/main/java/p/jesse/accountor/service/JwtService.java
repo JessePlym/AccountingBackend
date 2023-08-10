@@ -1,11 +1,7 @@
 package p.jesse.accountor.service;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
-import org.springframework.security.oauth2.jwt.JwsHeader;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 import p.jesse.accountor.entities.User;
 
@@ -30,12 +26,11 @@ public class JwtService {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(timestamp)
-                .expiresAt(timestamp.plus(30, ChronoUnit.DAYS))
+                .expiresAt(timestamp.plus(7, ChronoUnit.DAYS))
                 .subject(user.getUsername())
                 .claim("scope", scope)
                 .build();
-        JwtEncoderParameters encoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS512).build(), claims);
-        return this.jwtEncoder.encode(encoderParameters).getTokenValue();
+        return this.jwtEncoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
     }
 
 }

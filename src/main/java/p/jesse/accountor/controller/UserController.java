@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import p.jesse.accountor.entities.User;
 import p.jesse.accountor.records.NewPasswordRequest;
 import p.jesse.accountor.records.UserUpdateRequest;
 import p.jesse.accountor.service.UserService;
@@ -17,6 +18,11 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/current")
+    public User getUserInformation(Authentication authentication) {
+        return userService.getUserInformation(authentication);
     }
 
     @PutMapping("/current/update-details")

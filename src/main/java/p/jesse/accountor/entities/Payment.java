@@ -1,5 +1,6 @@
 package p.jesse.accountor.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -28,6 +29,7 @@ public class Payment {
 
     @ManyToOne
     @JoinColumn(name = "users_id")
+    @JsonIgnore
     private User user;
 
     public Payment(BigDecimal amount, String description, LocalDate createdAt, boolean isContinuous, Category category, User user) {

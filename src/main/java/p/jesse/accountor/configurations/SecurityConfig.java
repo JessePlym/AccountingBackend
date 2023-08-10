@@ -1,20 +1,30 @@
 package p.jesse.accountor.configurations;
 
+import com.nimbusds.jose.jwk.JWK;
+import com.nimbusds.jose.jwk.JWKSet;
+import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import p.jesse.accountor.utils.RSAKeyProperties;
 
 import javax.crypto.spec.SecretKeySpec;
 
@@ -27,7 +37,11 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableGlobalAuthentication
 public class SecurityConfig {
 
-    private final String SECRET_KEY = System.getenv("SECRET");
+    private final RSAKeyProperties keys;
+
+    public SecurityConfig(RSAKeyProperties keys) {
+        this.keys = keys;
+    }
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http) throws Exception{
@@ -40,11 +54,10 @@ public class SecurityConfig {
                     auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
+                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
                 .sessionManagement(session -> {
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                 })
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
-                .httpBasic(withDefaults())
                 .headers(headers -> {
                     headers.frameOptions(options -> options.disable());
                     headers.xssProtection(xss -> xss.disable());
@@ -53,15 +66,21 @@ public class SecurityConfig {
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(UserDetailsService detailsService) {
+        DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
+        daoProvider.setUserDetailsService(detailsService);
+        return new ProviderManager(daoProvider);
+    }
+
+    @Bean
     JwtDecoder jwtDecoder() {
-        byte[] bytes = SECRET_KEY.getBytes();
-        SecretKeySpec originalKey = new SecretKeySpec(bytes, "RSA");
-        return NimbusJwtDecoder.withSecretKey(originalKey).macAlgorithm(MacAlgorithm.HS512).build();
+        return NimbusJwtDecoder.withPublicKey(keys.getPublicKey()).build();
     }
 
     @Bean
     JwtEncoder jwtEncoder() {
-        ImmutableSecret<SecurityContext> secret = new ImmutableSecret<>(SECRET_KEY.getBytes());
-        return new NimbusJwtEncoder(secret);
+        JWK jwk = new RSAKey.Builder(keys.getPublicKey()).privateKey(keys.getPrivateKey()).build();
+        JWKSource<SecurityContext> jwkSource = new ImmutableJWKSet<>(new JWKSet(jwk));
+        return new NimbusJwtEncoder(jwkSource);
     }
 }

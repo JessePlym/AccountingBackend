@@ -34,6 +34,12 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 
+    public User getUserInformation(Authentication authentication) {
+        User user = userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
+        return user;
+    }
+
     public ResponseEntity<String> updateUserDetails(UserUpdateRequest userUpdateRequest, Authentication authentication) {
         User updatedUser = userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("user not found"));
