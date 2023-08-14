@@ -60,9 +60,7 @@ public class AuthService {
                 throw new CredentialException("Username or password incorrect!");
             }
             String token = jwtService.generateToken(user);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.AUTHORIZATION, token);
-            return new ResponseEntity<>(headers, HttpStatus.OK);
+            return ResponseEntity.ok().body(token);
         }
     }
 }

@@ -1,6 +1,7 @@
 package p.jesse.accountor.handlers;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

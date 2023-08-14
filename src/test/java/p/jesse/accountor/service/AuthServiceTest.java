@@ -89,7 +89,6 @@ class AuthServiceTest {
         ResponseEntity<String> actualRequest = authService.authenticate(request);
 
         assertThat(actualRequest.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(actualRequest.getHeaders().size()).isEqualTo(1);
 
         verify(userRepository, atLeast(1)).findByUsername(Mockito.any());
         verify(passwordHash).checkPassword(Mockito.any(), Mockito.any());
