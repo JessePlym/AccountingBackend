@@ -10,7 +10,11 @@ Welcome to the documentation for the **AccountingBackend** - a backend applicati
 
 The **AccountingBackend** application is built using the following technologies:
 
-- **Spring Framework:** The backend is developed using the Spring Framework, which offers a wide range of tools and features for building robust and scalable Java applications.
+- **Spring Framework:**
+- **Spring Data JPA:**
+- **Spring Security:**
+- **OAuth2 Resource Server:**
+- **PostgreSQL:**
   
 ## Installation guide
 
@@ -33,10 +37,11 @@ git clone [repository URL]
 You can download an IDE (eg. IntelliJ) and export the cloned project
 The IDE will scan pom.xml file and download all dependencies. It also builds and runs the application.
 - Add following environment variables for postgres: USERNAME and PASSWORD.
-- Add environment variable for secret key: SECRET which value must at least 256 bit long string.
 Guide to add environment variables in IntelliJ is here https://www.jetbrains.com/help/objc/add-environment-variables-and-program-arguments.html
 
-For running tests, add environment variable SECRET to test classes as well.
+## Application
+
+Link for the application is https://accounting-backend-98ed723ee046.herokuapp.com/
 
 ## APi documentation
 
