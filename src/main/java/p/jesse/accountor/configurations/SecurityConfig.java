@@ -63,7 +63,7 @@ public class SecurityConfig {
                     headers.frameOptions(options -> options.disable());
                     headers.xssProtection(xss -> xss.disable());
                 })
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(withDefaults())
                 .build();
     }
 
