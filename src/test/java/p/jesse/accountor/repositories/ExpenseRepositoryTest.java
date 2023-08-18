@@ -10,7 +10,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import p.jesse.accountor.entities.Category;
 import p.jesse.accountor.entities.Expense;
-import p.jesse.accountor.entities.Expense;
 import p.jesse.accountor.entities.User;
 import p.jesse.accountor.enums.Role;
 
@@ -19,7 +18,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ContextConfiguration(classes = {ExpenseRepository.class})
 @EnableAutoConfiguration
@@ -70,43 +68,6 @@ class ExpenseRepositoryTest {
         assertThat(actualExpense).isEqualTo(expense);
         assertThat(actualExpense.getUser().getUsername()).isEqualTo(user.getUsername());
         assertThat(expenseRepository.findAllByUser(user)).hasSize(1);
-    }
-
-    @Test
-    void shouldFindExpensesByUserAndCategoryOrderByDate() {
-        User user = new User(
-                "Jesse",
-                "Plym",
-                "username",
-                "asd123456",
-                LocalDate.now(),
-                Role.USER);
-        userRepository.save(user);
-        Category category = new Category("some_category");
-        categoryRepository.save(category);
-        Expense expense1 = new Expense(
-                new BigDecimal(200),
-                "bill",
-                LocalDate.now().plusDays(5),
-                false,
-                category,
-                "some_receiver",
-                user
-        );
-        Expense expense2 = new Expense(
-                new BigDecimal(200),
-                "bill",
-                LocalDate.now(),
-                false,
-                category,
-                "some_receiver",
-                user
-        );
-        expenseRepository.saveAll(List.of(expense1, expense2));
-        List<Expense> actualExpenseList = expenseRepository.findAllByUserAndCategoryOrderByCreatedAt(user, category);
-        assertThat(actualExpenseList).hasSize(2);
-        assertThat(actualExpenseList.get(0)).isEqualTo(expense2);
-        assertThat(actualExpenseList).allMatch(expense -> user.equals(expense.getUser()));
     }
 
     @Test

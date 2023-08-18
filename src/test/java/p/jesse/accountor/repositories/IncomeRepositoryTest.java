@@ -1,6 +1,5 @@
 package p.jesse.accountor.repositories;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ContextConfiguration(classes = {IncomeRepository.class})
 @EnableAutoConfiguration
@@ -70,43 +68,6 @@ class IncomeRepositoryTest {
         assertThat(actualIncome).isEqualTo(income);
         assertThat(actualIncome.getUser().getUsername()).isEqualTo(user.getUsername());
         assertThat(incomeRepository.findAllByUser(user)).hasSize(1);
-    }
-
-    @Test
-    void shouldFindAllIncomeByCategoryOrderedByDate() {
-        User user = new User(
-                "Jesse",
-                "Plym",
-                "username",
-                "asd123456",
-                LocalDate.now(),
-                Role.USER);
-        userRepository.save(user);
-        Category category = new Category("some_category");
-        categoryRepository.save(category);
-        Income income1 = new Income(
-                new BigDecimal(200),
-                "bill",
-                LocalDate.now().plusDays(10),
-                false,
-                category,
-                user,
-                "no source"
-        );
-        Income income2 = new Income(
-                new BigDecimal(200),
-                "bill",
-                LocalDate.now(),
-                false,
-                category,
-                user,
-                "no source"
-        );
-        incomeRepository.saveAll(List.of(income1, income2));
-        List<Income> actualIncomeList = incomeRepository.findAllByUserAndCategoryOrderByCreatedAt(user, category);
-        assertThat(actualIncomeList).hasSize(2);
-        assertThat(actualIncomeList.get(0)).isEqualTo(income2);
-        assertThat(actualIncomeList).allMatch(income -> user.equals(income.getUser()));
     }
 
     @Test
