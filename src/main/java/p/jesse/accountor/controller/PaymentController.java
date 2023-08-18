@@ -48,14 +48,9 @@ public class PaymentController {
         return expenseService.getAllExpensesByUser(authentication);
     }
 
-    @GetMapping("/income/by-category")
-    public List<Income> getAllIncomeOfUserByCategory(@RequestParam(name = "category-id", required = true) Category category, Authentication authentication) {
-        return incomeService.getAllIncomeOfUserByCategory(authentication, category);
-    }
-
-    @GetMapping("/expense/by-category")
-    public List<Expense> getAllExpensesOfUserByCategory(@RequestParam(name = "category-id", required = true) Category category, Authentication authentication) {
-        return expenseService.getAllExpensesOfUserByCategory(authentication, category);
+    @GetMapping("/by-category")
+    public List<Payment> getAllPaymentsByCategory(@RequestParam(name = "category_id", required = true) Category category, Authentication authentication) {
+        return paymentService.getAllPaymentsByUserAndCategory(authentication, category);
     }
 
     @GetMapping("/income/by-source")

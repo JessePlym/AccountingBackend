@@ -34,10 +34,6 @@ public class ExpenseService {
         return expenseRepository.findAllByUser(user);
     }
 
-    public List<Expense> getAllExpensesOfUserByCategory(Authentication authentication, Category category) {
-        User user = authChecker.extractUser(authentication, userRepository);
-        return expenseRepository.findAllByUserAndCategoryOrderByCreatedAt(user, category);
-    }
 
     public List<Expense> getAllExpensesOfUserByReceiver(Authentication authentication, String receiver) {
         User user = authChecker.extractUser(authentication, userRepository);

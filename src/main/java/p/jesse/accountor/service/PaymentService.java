@@ -4,8 +4,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import p.jesse.accountor.entities.Category;
 import p.jesse.accountor.entities.Payment;
 import p.jesse.accountor.entities.User;
+import p.jesse.accountor.repositories.CategoryRepository;
 import p.jesse.accountor.repositories.PaymentRepository;
 import p.jesse.accountor.repositories.UserRepository;
 import p.jesse.accountor.utils.AuthChecker;
@@ -17,11 +19,13 @@ import java.util.Optional;
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
+    private final CategoryRepository categoryRepository;
     private final AuthChecker authChecker;
     private final UserRepository userRepository;
 
-    public PaymentService(PaymentRepository paymentRepository, AuthChecker authChecker, UserRepository userRepository) {
+    public PaymentService(PaymentRepository paymentRepository, CategoryRepository categoryRepository, AuthChecker authChecker, UserRepository userRepository) {
         this.paymentRepository = paymentRepository;
+        this.categoryRepository = categoryRepository;
         this.authChecker = authChecker;
         this.userRepository = userRepository;
     }
@@ -33,6 +37,11 @@ public class PaymentService {
     public List<Payment> getAllPaymentsByUser(Authentication authentication) {
         User user = authChecker.extractUser(authentication, userRepository);
         return paymentRepository.findAllByUserOrderByCreatedAt(user);
+    }
+
+    public List<Payment> getAllPaymentsByUserAndCategory(Authentication authentication, Category category) {
+        User user = authChecker.extractUser(authentication, userRepository);
+        return paymentRepository.findAllByUserAndCategoryOrderByCreatedAt(user, category);
     }
 
     public ResponseEntity<String> deletePaymentEntry(Long id, Authentication authentication) {

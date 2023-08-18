@@ -34,11 +34,6 @@ public class IncomeService {
         return incomeRepository.findAllByUser(user);
     }
 
-    public List<Income> getAllIncomeOfUserByCategory(Authentication authentication, Category category) {
-        User user = authChecker.extractUser(authentication, userRepository);
-        return incomeRepository.findAllByUserAndCategoryOrderByCreatedAt(user, category);
-    }
-
     public List<Income> getAllIncomeOfUserBySource(Authentication authentication, String source) {
         User user = authChecker.extractUser(authentication, userRepository);
         return incomeRepository.findAllByUserAndSourceOrderByCreatedAt(user, source.trim().replace("_", " "));

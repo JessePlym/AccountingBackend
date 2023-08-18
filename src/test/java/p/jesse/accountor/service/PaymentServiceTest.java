@@ -10,9 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.test.context.ContextConfiguration;
+import p.jesse.accountor.entities.Category;
 import p.jesse.accountor.entities.Payment;
 import p.jesse.accountor.entities.User;
 import p.jesse.accountor.enums.Role;
+import p.jesse.accountor.repositories.CategoryRepository;
 import p.jesse.accountor.repositories.PaymentRepository;
 import p.jesse.accountor.repositories.UserRepository;
 import p.jesse.accountor.utils.AuthChecker;
@@ -33,12 +35,14 @@ class PaymentServiceTest {
     @Mock
     private UserRepository userRepository;
     @Mock
+    private CategoryRepository categoryRepository;
+    @Mock
     private AuthChecker authChecker;
     private PaymentService paymentService;
 
     @BeforeEach
     void setUp() {
-        paymentService = new PaymentService(paymentRepository, authChecker, userRepository);
+        paymentService = new PaymentService(paymentRepository, categoryRepository, authChecker, userRepository);
     }
 
     @Test
@@ -54,6 +58,19 @@ class PaymentServiceTest {
         when(authChecker.extractUser(Mockito.any(), Mockito.any())).thenReturn(existingUser);
         paymentService.getAllPaymentsByUser(new BearerTokenAuthenticationToken(existingUser.getUsername()));
         verify(paymentRepository).findAllByUserOrderByCreatedAt(Mockito.any());
+    }
+
+    @Test
+    void shouldReturnAllPaymentsByUserAndCategory() {
+        User existingUser = new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER);
+        Category category = new Category("some-category");
+        categoryRepository.save(category);
+        when(authChecker.extractUser(Mockito.any(), Mockito.any())).thenReturn(existingUser);
+        List<Payment> actualList = paymentService.getAllPaymentsByUserAndCategory(
+                new BearerTokenAuthenticationToken(existingUser.getUsername()),
+                category);
+        assertThat(actualList).allMatch(expense -> existingUser.equals(expense.getUser()) && category.equals(expense.getCategory()));
+        verify(paymentRepository).findAllByUserAndCategoryOrderByCreatedAt(Mockito.any(), Mockito.any());
     }
 
     @Test

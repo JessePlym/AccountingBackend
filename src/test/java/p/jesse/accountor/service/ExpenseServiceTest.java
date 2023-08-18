@@ -55,16 +55,6 @@ class ExpenseServiceTest {
     }
 
     @Test
-    void shouldReturnAllExpensesOfUserByCategory() {
-        User existingUser = new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER);
-        Category existingCategory = new Category("some_category");
-        when(authChecker.extractUser(Mockito.any(), Mockito.any())).thenReturn(existingUser);
-        List<Expense> actualList = expenseService.getAllExpensesOfUserByCategory(new BearerTokenAuthenticationToken("ABC123"), existingCategory);
-        assertThat(actualList).allMatch(expense -> existingUser.equals(expense.getUser()) && existingCategory.equals(expense.getCategory()));
-        verify(expenseRepository).findAllByUserAndCategoryOrderByCreatedAt(Mockito.any(), Mockito.any());
-    }
-
-    @Test
     void shouldReturnAllExpensesOfUserByReceiver() {
         User existingUser = new User("Jesse", "Plym", "jplym", "old_password", LocalDate.now(), Role.USER);
         String receiver = "some_category";
