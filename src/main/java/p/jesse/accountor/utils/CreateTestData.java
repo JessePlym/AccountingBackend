@@ -46,12 +46,16 @@ public class CreateTestData {
     public void createTestCategories() {
         categoryRepository.deleteAll();
 
-        Category testCategory1 = new Category("salary");
-        Category testCategory2 = new Category("bill");
-        Category testCategory3 = new Category("purchase");
+        Category testCategory1 = new Category("Salary");
+        Category testCategory2 = new Category("Bill");
+        Category testCategory3 = new Category("Purchase");
+        Category testCategory4 = new Category("Support");
+        Category testCategory5 = new Category("Loan");
+        Category testCategory6 = new Category("Rent");
+        Category testCategory7 = new Category("Other");
 
 
-        categoryRepository.saveAll(List.of(testCategory1, testCategory2, testCategory3));
+        categoryRepository.saveAll(List.of(testCategory1, testCategory2, testCategory3, testCategory4, testCategory5, testCategory6, testCategory7));
     }
 
     public void createTestExpenses() {
