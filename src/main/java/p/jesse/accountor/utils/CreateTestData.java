@@ -61,8 +61,8 @@ public class CreateTestData {
     public void createTestExpenses() {
         expenseRepository.deleteAll();
 
-        Expense testExpense1 = new Expense(new BigDecimal(100), "lasku", LocalDate.now(), true, categoryRepository.findByName("bill").get(), "Elisa", userRepository.findByUsername("Plymander").get());
-        Expense testExpense2 = new Expense(new BigDecimal(10), "ostos", LocalDate.now().plusDays(10), false, categoryRepository.findByName("purchase").get(), "K-market", userRepository.findByUsername("Plymander").get());
+        Expense testExpense1 = new Expense(new BigDecimal(100), "lasku", LocalDate.now(), true, categoryRepository.findByName("Bill").get(), "Elisa", userRepository.findByUsername("Plymander").get());
+        Expense testExpense2 = new Expense(new BigDecimal(10), "ostos", LocalDate.now().plusDays(10), false, categoryRepository.findByName("Purchase").get(), "K-market", userRepository.findByUsername("Plymander").get());
 
         expenseRepository.saveAll(List.of(testExpense1, testExpense2));
 
@@ -71,10 +71,10 @@ public class CreateTestData {
     public void createTestIncome() {
         incomeRepository.deleteAll();
 
-        Income testIncome1 = new Income(new BigDecimal(2000), "palkka", LocalDate.now(), false, categoryRepository.findByName("salary").get(), userRepository.findByUsername("Plymander").get(), "Caseum Oy");
-        Income testIncome2 = new Income(new BigDecimal(2000), "palkka", LocalDate.now(), false, categoryRepository.findByName("salary").get(), userRepository.findByUsername("admin").get(), "Caseum Oy");
-        Income testIncome3 = new Income(new BigDecimal(2500), "palkka", LocalDate.now().plusMonths(1), false, categoryRepository.findByName("salary").get(), userRepository.findByUsername("Plymander").get(), "Caseum Oy");
-        Income testIncome4 = new Income(new BigDecimal(2240), "palkka", LocalDate.now().plusMonths(2), false, categoryRepository.findByName("salary").get(), userRepository.findByUsername("Plymander").get(), "Caseum Oy");
+        Income testIncome1 = new Income(new BigDecimal(2000), "palkka", LocalDate.now(), false, categoryRepository.findByName("Salary").get(), userRepository.findByUsername("Plymander").get(), "Caseum Oy");
+        Income testIncome2 = new Income(new BigDecimal(2000), "palkka", LocalDate.now(), false, categoryRepository.findByName("Salary").get(), userRepository.findByUsername("admin").get(), "Caseum Oy");
+        Income testIncome3 = new Income(new BigDecimal(2500), "palkka", LocalDate.now().plusMonths(1), false, categoryRepository.findByName("Salary").get(), userRepository.findByUsername("Plymander").get(), "Caseum Oy");
+        Income testIncome4 = new Income(new BigDecimal(2240), "palkka", LocalDate.now().plusMonths(2), false, categoryRepository.findByName("Salary").get(), userRepository.findByUsername("Plymander").get(), "Caseum Oy");
 
         incomeRepository.saveAll(List.of(testIncome1, testIncome2, testIncome3, testIncome4));
     }
