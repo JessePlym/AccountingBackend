@@ -14,4 +14,7 @@ public class HomeController {
     public String index() {
         return "App is running!";
     }
+
+    @GetMapping("/connect")
+    public void isAwake() {}
 }

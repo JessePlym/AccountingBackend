@@ -49,7 +49,7 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/").permitAll();
+                    auth.requestMatchers("/", "/connect").permitAll();
                     auth.requestMatchers(HttpMethod.POST, "/api/auth/**").permitAll();
                     auth.requestMatchers(HttpMethod.GET, "/api/user/payments/all").hasAuthority("SCOPE_ADMIN");
                     auth.requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll();
